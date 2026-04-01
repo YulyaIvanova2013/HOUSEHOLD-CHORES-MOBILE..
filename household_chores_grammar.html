@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OGE Grammar Practice — Household & Home</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f3f8ff 0%, #eaf2ff 100%);
+      color: #1f2a44;
+      min-height: 100vh;
+      padding: 28px;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: 0 18px 48px rgba(38, 72, 120, 0.18);
+      overflow: hidden;
+      border: 4px solid #dbe8ff;
+    }
+    .header {
+      background: linear-gradient(180deg, #2f7bff 0%, #1f5fe0 100%);
+      color: white;
+      padding: 28px 34px 22px;
+    }
+    .header h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: 0.3px;
+    }
+    .header p {
+      margin: 0;
+      font-size: 18px;
+      opacity: 0.96;
+    }
+    .content {
+      padding: 26px 26px 16px;
+    }
+    .intro {
+      background: linear-gradient(180deg, #fff8d8 0%, #ffe989 100%);
+      color: #234;
+      border: 3px solid #ffd84a;
+      border-radius: 22px;
+      padding: 18px 20px;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 18px rgba(255, 216, 74, 0.22);
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #eaf2ff;
+      border: 2px solid #cfe0ff;
+      border-radius: 999px;
+      color: #1f5fe0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .section {
+      display: none;
+      background: #f7faff;
+      border: 3px solid #dbe8ff;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 18px rgba(46, 108, 255, 0.08);
+    }
+    .section.active { display: block; }
+    .section-title {
+      display: inline-block;
+      margin: 0 0 16px;
+      padding: 10px 18px;
+      background: linear-gradient(180deg, #2f7bff 0%, #1f5fe0 100%);
+      color: white;
+      border-radius: 18px;
+      font-size: 24px;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(46, 108, 255, 0.22);
+    }
+    .task {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: white;
+      border: 2px solid #dbe8ff;
+      border-radius: 20px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #2f7bff 0%, #1f5fe0 100%);
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(46, 108, 255, 0.22);
+      flex-shrink: 0;
+    }
+    .sentence {
+      font-size: 21px;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #1f2a44;
+    }
+    .prompt {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      border: 2px solid #cfe0ff;
+      color: #1f5fe0;
+      font-size: 15px;
+      font-weight: 800;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .answer-input {
+      width: 180px;
+      max-width: 100%;
+      display: inline-block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #bed1fb;
+      background: #fffdf4;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2a44;
+      outline: none;
+      margin: 0 4px;
+    }
+    .answer-input:focus {
+      border-color: #2f7bff;
+      box-shadow: 0 0 0 4px rgba(47, 123, 255, 0.12);
+    }
+    .correct {
+      border-color: #2fb461 !important;
+      background: #effcf4 !important;
+    }
+    .wrong {
+      border-color: #e14b4b !important;
+      background: #fff1f1 !important;
+    }
+    .explanation {
+      display: none;
+      margin-top: 12px;
+      background: #fff8d8;
+      border: 2px solid #ffd84a;
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: #374151;
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+    .explanation.visible { display: block; }
+    .answer-line {
+      color: #1f9d51;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .section-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      padding-top: 4px;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    button {
+      border: none;
+      border-radius: 16px;
+      padding: 15px 24px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: #2e6cff;
+      box-shadow: 0 8px 18px rgba(46, 108, 255, 0.22);
+    }
+    button.secondary {
+      background: #f0b800;
+      color: #1f2a44;
+      box-shadow: 0 8px 18px rgba(240, 184, 0, 0.22);
+    }
+    button.ghost {
+      background: #dfe9ff;
+      color: #1f2a44;
+      box-shadow: none;
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .result {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1f2a44;
+    }
+    .footer-note {
+      margin: 8px 26px 26px;
+      background: #eaf2ff;
+      border: 3px solid #cfe0ff;
+      border-radius: 20px;
+      padding: 16px 18px;
+      font-size: 18px;
+      color: #44506b;
+      font-weight: 700;
+    }
+    @media (max-width: 820px) {
+      body { padding: 14px; }
+      .header h1 { font-size: 28px; }
+      .intro { font-size: 17px; }
+      .task {
+        grid-template-columns: 48px 1fr;
+        gap: 12px;
+        padding: 14px;
+      }
+      .num {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+      .sentence {
+        font-size: 18px;
+      }
+      .answer-input {
+        width: 145px;
+        font-size: 16px;
+      }
+      .result { font-size: 18px; }
+      .section-controls { align-items: stretch; }
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      .wrap { box-shadow: none; border: none; }
+      button { display: none; }
+      .section { display: block !important; }
+      .explanation { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>OGE Grammar Practice</h1>
+      <p> Проверь ответы и смотри простые объяснения.</p>
+    </div>
+
+    <div class="content">
+      <div class="intro">
+        Прочитайте текст и преобразуйте слова, напечатанные заглавными буквами, так, чтобы они грамматически соответствовали содержанию.
+      </div>
+      <div class="topbar">
+        <div class="pill" id="pageCounter">Page 1 / 3</div>
+        <div class="pill" id="pageResult">Score: 0 / 9</div>
+      </div>
+
+<section class="section active" data-section="0">
+<h2 class="section-title">Morning</h2>
+
+        <div class="task">
+          <div class="num">20</div>
+          <div>
+            <div class="sentence">
+              Jeff woke up late. The house was very quiet and Jeff <input class="answer-input" data-answer="understood" /> that he was alone there. He got up and headed to the kitchen.
+              <span class="prompt">UNDERSTAND</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: understood</div>
+              <div>Рассказ в прошлом. Глагол understand нужно поставить в Past Simple, потому что Jeff woke up late и realised это уже случилось.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">21</div>
+          <div>
+            <div class="sentence">
+              There <input class="answer-input" data-answer="was" /> nobody in it but he felt the delicious aroma of fresh baking.
+              <span class="prompt">BE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: was</div>
+              <div>Слово nobody —единственное число,глагол be в единственном числе в Past Simple was: there was nobody.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">22</div>
+          <div>
+            <div class="sentence">
+              A large bowl of doughnuts was on the table. It <input class="answer-input" data-answer="was covered" /> with a white kitchen towel but Jeff could not resist it and pulled out a doughnut.
+              <span class="prompt">COVER</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: was covered</div>
+              <div>Миска была накрыта. Здесь нужен пассивный залог: was covered</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">23</div>
+          <div>
+            <div class="sentence">
+              When he was consuming his <input class="answer-input" data-answer="fifth" /> one, his grandmother appeared at the doorway.
+              <span class="prompt">FIVE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: fifth</div>
+              <div>ОТ five порядковое числительное fifth — пятый.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">24</div>
+          <div>
+            <div class="sentence">
+              She <input class="answer-input" data-answer="was wearing" /> light working trousers, a T-shirt, and an old straw hat.
+              <span class="prompt">WEAR</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: was wearing</div>
+              <div>Описывается, во что бабушка была одета в тот момент в прошлом используем Past Continuous: was wearing.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">25</div>
+          <div>
+            <div class="sentence">
+              Jeff guessed that she had been working on <input class="answer-input" data-answer="her" /> roses, in the front garden.
+              <span class="prompt">SHE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: her</div>
+              <div>Перед словом roses нужно притяжательное местоимение: her roses</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">26</div>
+          <div>
+            <div class="sentence">
+              “Fine, you <input class="answer-input" data-answer="have woken" /> up at last!” said Granny, “But why are you still undressed? Go and wash and get dressed immediately!”
+              <span class="prompt">WAKE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: have woken</div>
+              <div>Бабушка говорит о результате к настоящему моменту: ты наконец-то проснулся. Поэтому нужен Present Perfect: have woken.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">27</div>
+          <div>
+            <div class="sentence">
+              Jeff remembered that Granny had always been very strict about the morning routine. She never allowed her grandchildren to look untidy or avoid brushing their <input class="answer-input" data-answer="teeth" />.
+              <span class="prompt">TOOTH</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: teeth</div>
+              <div>Множественное число от tooth-teeth.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">28</div>
+          <div>
+            <div class="sentence">
+              “Ok-ok, just a second,” laughed Jeff picking up another doughnut and retreating through the other door. “I <input class="answer-input" data-answer="will come" /> as soon as I am ready.”
+              <span class="prompt">COME</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: will come</div>
+              <div>В главной части условного предложения используем Future Simple will come.</div>
+            </div>
+          </div>
+        </div>
+
+      <div class="section-controls">
+        <div class="buttons">
+          <button class="check-btn">Check answers</button>
+          <button class="show-btn secondary">Show all explanations</button>
+          <button class="reset-btn ghost">Reset this page</button>
+        </div>
+      </div>
+    </section>
+
+<section class="section" data-section="1">
+<h2 class="section-title">Wall colouring</h2>
+
+        <div class="task">
+          <div class="num">29</div>
+          <div>
+            <div class="sentence">
+              Kathy looked at her new room’s white walls. “They’re so plain.” “Don’t worry,” Dad said, “If you don’t like them, we <input class="answer-input" data-answer="will make" /> the walls any colour you like.”
+              <span class="prompt">MAKE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: will make</div>
+              <div>  В условных предложениях в главном предложении will + verb. Поэтому: will make.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">30</div>
+          <div>
+            <div class="sentence">
+              “Do you want pink?” Mum suggested. Kathy <input class="answer-input" data-answer="shook" /> her head.
+              <span class="prompt">SHAKE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: shook</div>
+              <div>Это действие в прошлом, поэтому нужен Past Simple: shook.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">31</div>
+          <div>
+            <div class="sentence">
+              “No, pink is either for <input class="answer-input" data-answer="babies" /> or for silly girls who like Barbie dolls. I’m neither of those.”
+              <span class="prompt">BABY</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: babies</div>
+              <div>Множественное число от baby- babies.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">32</div>
+          <div>
+            <div class="sentence">
+              Her parents smiled but <input class="answer-input" data-answer="did not say" /> anything.
+              <span class="prompt">NOT SAY</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: did not say</div>
+              <div>Действие в прошлом с отрицанием: did not + глагол. Поэтому: did not say</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">33</div>
+          <div>
+            <div class="sentence">
+              “But what colour to choose? I wish we <input class="answer-input" data-answer="could" /> ask a designer for professional advice,” said Kathy.
+              <span class="prompt">CAN</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: could</div>
+              <div>После I wish о настоящем используем форму прошедшего времени для нереального желания. От can будет could.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">34</div>
+          <div>
+            <div class="sentence">
+              “Oh, no! It’s out of the question!” said Kathy’s mother, firmly. A designer’s advice is much <input class="answer-input" data-answer="more expensive" /> than we can afford.”
+              <span class="prompt">EXPENSIVE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: more expensive</div>
+              <div>После much и than нужна сравнительная степень многосложного пртлагательного: more expensive.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">35</div>
+          <div>
+            <div class="sentence">
+              “Ok. It was just an idea.” “Getting back to the wall colour, why not make your room yellow or orange?” Dad suggested. “When the walls <input class="answer-input" data-answer="are painted" /> in those colours, the room will look cheerful.”
+              <span class="prompt">PAINT</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: are painted</div>
+              <div>Нужен пассивный залог и это условное предложение: are painted = будут покрашены / покрашены.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">36</div>
+          <div>
+            <div class="sentence">
+              “Yes!” Kathy definitely liked the idea. “We’ll make three walls yellow, but the <input class="answer-input" data-answer="fourth" /> one will be orange.”
+              <span class="prompt">FOUR</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: fourth</div>
+              <div>Нужно порядковое числительное: four-fourth</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">37</div>
+          <div>
+            <div class="sentence">
+              The next day, when Kathy came back from school, her Dad said: “Look what I<input class="answer-input" data-answer="have bought" />.” There were paints and brushes on the floor. “Everything’s ready for us to start.” He smiled and handed Kathy the brush.
+              <span class="prompt">BUY</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: have bought</div>
+              <div>Фраза Look what I have bought! показывает результат сейчас. Поэтому Present Perfect.</div>
+            </div>
+          </div>
+        </div>
+
+      <div class="section-controls">
+        <div class="buttons">
+          <button class="check-btn">Check answers</button>
+          <button class="show-btn secondary">Show all explanations</button>
+          <button class="reset-btn ghost">Reset this page</button>
+        </div>
+      </div>
+    </section>
+
+<section class="section" data-section="2">
+<h2 class="section-title">House</h2>
+
+        <div class="task">
+          <div class="num">38</div>
+          <div>
+            <div class="sentence">
+              When you look at this lovely house in the Welsh countryside, you may think it’s a picture from J.R.R. Tolkien’s book ‘The Hobbit’. In fact it’s a real house designed by a real person. When <input class="answer-input" data-answer="their" /> first son was born, Simon Dale’s wife, Jasmine, said:
+              <span class="prompt">THEY</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: their</div>
+              <div>Перед son необходимо притяжательное местоимение: their first son = их первый сын.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">39</div>
+          <div>
+            <div class="sentence">
+              “I wish we <input class="answer-input" data-answer="lived" /> in the country. It would be so good for the baby”.
+              <span class="prompt">LIVE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: lived</div>
+              <div>После I wish для нереального желания в настоящем используем форму прошедшего времени: lived.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">40</div>
+          <div>
+            <div class="sentence">
+              However, they <input class="answer-input" data-answer="did not have" /> enough money to buy or rent a house in the country so they decided to take matters into their own hands.
+              <span class="prompt">NOT HAVE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: did not have</div>
+              <div>Это факт из прошлого, значит нужно отрицание в Past Simple did not have.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">41</div>
+          <div>
+            <div class="sentence">
+              The house <input class="answer-input" data-answer="was built" /> by Simon himself, with a bit of help from his friends. The result is impressive.
+              <span class="prompt">BUILD</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: was built</div>
+              <div>Дом построили, а не он сам строил. Здесь нужен пассивный залог в прошлом: was built.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">42</div>
+          <div>
+            <div class="sentence">
+              The home is made of natural materials, such as wood, stone and mud. It uses solar panels for energy and its water <input class="answer-input" data-answer="comes" /> from a nearby spring.
+              <span class="prompt">COME</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: comes</div>
+              <div>Это общее описание дома в настоящем, поэтому Present Simple: comes.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">43</div>
+          <div>
+            <div class="sentence">
+              It took Simon four months to complete his fairytale home. He managed to create a modern wooden eco-home – one of the <input class="answer-input" data-answer="most wonderful" /> houses you can imagine.
+              <span class="prompt">WONDERFUL</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: most wonderful</div>
+              <div>После one of the нужна превосходная степень многосложного прилагательного: one of the most wonderful houses.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">44</div>
+          <div>
+            <div class="sentence">
+              Simon Dale said, “I <input class="answer-input" data-answer="have started" /> working on a new house of the same eco-style.
+              <span class="prompt">START</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: have started</div>
+              <div>Он говорит о результате к настоящему моменту: я уже начал. Поэтому Present Perfect: have started.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">45</div>
+          <div>
+            <div class="sentence">
+              My <input class="answer-input" data-answer="second" /> house will be smarter than the first one.
+              <span class="prompt">TWO</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: second</div>
+              <div>От two порядковое числительное second: my second house.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="num">46</div>
+          <div>
+            <div class="sentence">
+              My son <input class="answer-input" data-answer="is" /> five now and I hope to celebrate his tenth birthday in a new house.”
+              <span class="prompt">BE</span>
+            </div>
+            <div class="explanation">
+              <div class="answer-line">Correct answer: is</div>
+              <div>Слово now показывает настоящее время. Поэтому: my son is five now.</div>
+            </div>
+          </div>
+        </div>
+
+      <div class="section-controls">
+        <div class="buttons">
+          <button class="check-btn">Check answers</button>
+          <button class="show-btn secondary">Show all explanations</button>
+          <button class="reset-btn ghost">Reset this page</button>
+        </div>
+      </div>
+    </section>
+
+    </div>
+
+    <div class="section-controls" style="padding: 0 26px 26px;">
+      <div class="buttons">
+        <button id="backBtn" class="ghost">Back</button>
+        <button id="nextBtn">Next</button>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Tip: сначала попробуй сделать сам, потом нажми <b>Check answers</b>. После проверки под каждым номером появится короткое объяснение простым языком.
+    </div>
+  </div>
+
+  <script>
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const pageCounter = document.getElementById('pageCounter');
+    const pageResult = document.getElementById('pageResult');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentPage = 0;
+
+    function normalize(text) {
+      return text.trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function updateNav() {
+      sections.forEach((sec, i) => sec.classList.toggle('active', i === currentPage));
+      pageCounter.textContent = `Page ${currentPage + 1} / ${sections.length}`;
+      backBtn.disabled = currentPage === 0;
+      nextBtn.disabled = currentPage === sections.length - 1;
+      updatePageResult();
+    }
+
+    function updatePageResult() {
+      const section = sections[currentPage];
+      const inputs = Array.from(section.querySelectorAll('.answer-input'));
+      const correct = inputs.filter(i => i.classList.contains('correct')).length;
+      pageResult.textContent = `Score: ${correct} / ${inputs.length}`;
+    }
+
+    function checkSection(section) {
+      const inputs = Array.from(section.querySelectorAll('.answer-input'));
+      inputs.forEach(input => {
+        const value = normalize(input.value);
+        const answer = normalize(input.dataset.answer);
+        input.classList.remove('correct', 'wrong');
+        if (!value) {
+          input.classList.add('wrong');
+        } else if (value === answer) {
+          input.classList.add('correct');
+        } else {
+          input.classList.add('wrong');
+        }
+        const explanation = input.closest('.task').querySelector('.explanation');
+        explanation.classList.add('visible');
+      });
+      updatePageResult();
+    }
+
+    function showSection(section) {
+      section.querySelectorAll('.explanation').forEach(el => el.classList.add('visible'));
+    }
+
+    function resetSection(section) {
+      section.querySelectorAll('.answer-input').forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'wrong');
+      });
+      section.querySelectorAll('.explanation').forEach(el => el.classList.remove('visible'));
+      updatePageResult();
+    }
+
+    sections.forEach(section => {
+      section.querySelector('.check-btn').addEventListener('click', () => checkSection(section));
+      section.querySelector('.show-btn').addEventListener('click', () => showSection(section));
+      section.querySelector('.reset-btn').addEventListener('click', () => resetSection(section));
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (currentPage > 0) {
+        currentPage -= 1;
+        updateNav();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < sections.length - 1) {
+        currentPage += 1;
+        updateNav();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    updateNav();
+  </script>
+</body>
+</html>
